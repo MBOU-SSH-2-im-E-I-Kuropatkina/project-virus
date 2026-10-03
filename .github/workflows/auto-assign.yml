@@ -1,0 +1,26 @@
+name: Авто-присваивание
+on:
+    issues:
+        types: [opened]
+    pull_request:
+        types: [opened]
+jobs:
+    run:
+        runs-on: ubuntu-latest
+        permissions:
+            issues: write
+            pull-requests: write
+        steps:
+            - name: 'Авто-присваивание PR'
+              if: github.event_name == 'pull_request'
+              uses: pozil/auto-assign-issue@v1
+              with:
+                  repo-token: ${{ secrets.GITHUB_TOKEN }}
+                  assignees: Timon4ikRU, ivandenisovig70-png
+                  
+            - name: 'Авто-присваивание баг-репортов'
+              if: github.event_name == 'issues' && !contains(github.event.issue.labels.*.name, 'good first issue') && !contains(github.event.issue.labels.*.name, 'help wanted')
+              uses: pozil/auto-assign-issue@v1
+              with:
+                  repo-token: ${{ secrets.GITHUB_TOKEN }}
+                  assignees: Timon4ikRU, ivandenisovig70-png
